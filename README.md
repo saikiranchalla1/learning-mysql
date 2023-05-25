@@ -596,7 +596,7 @@ If a film with film_id = 1 exists, it will be replaced with the new values speci
 
 These are some of the commonly used data manipulation statements in MySQL.
 
-## MySQL Constraings
+## MySQL Constraints
 1. Primary Key Constraint:
 A primary key constraint is used to uniquely identify each row in a table. It ensures that the primary key column(s) have unique and non-null values. Here's an example of adding a primary key constraint to the actor table:
 

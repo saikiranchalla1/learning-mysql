@@ -651,3 +651,57 @@ MODIFY COLUMN title VARCHAR(255) NOT NULL;
 ```
 
 This query modifies the title column in the film table to disallow null values. It ensures that every film has a non-null title.
+
+
+## Using ClassicModels
+
+```
+use classicmodels;
+
+
+
+
+select * from productlines;
+show tables;
+
+
+
+select productCode, productName
+from products
+inner join productlines USING (productLine)
+
+
+select * from customers;
+select * from orders;
+
+
+select c.customerNumber, customerName, orderNumber, status
+FROm customers c
+LEFT JOIN orders o
+ON c.customerNumber = o.customerNumber;
+
+select * from orders where customerNumber = 125;
+
+
+select * from customers;
+select * from employees;
+
+
+SELECT employeeNumber, customerNumber
+from customers
+RIGHT JOIN employees
+ON salesRepEmployeeNumber = employeeNumber
+WHERE customerNumber is NULL
+ORDER BY employeeNumber;
+
+# SELF JOIN
+
+select * from employees;
+
+select concat(m.lastName, ' ', m.firstName) as Manager,
+concat (e.lastName, ' ', e.firstName) as 'Direct Report'
+From employees e
+inner join employees m
+ON m.employeeNumber = e.reportsTo
+ORDER BY Manager;
+```

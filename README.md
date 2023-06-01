@@ -181,6 +181,20 @@ exit
 That's it! You have successfully connected to MySQL using the MySQL Command Line Client
 
 ## MySQL Sample Database
+### (Preferred) Download ClassicModels
+
+1. DOwnload the Zip file attached to this repository
+2. Unzip it and use the following  command to import the data:
+
+```
+mysql -u root -p
+source <PATH TO THE FILE IN THE UNZIPPED FOLDER>
+show databases;
+```
+
+Make sure that you see `classicmodels` in the above output.
+
+### Download Sakila Database
 Here are detailed instructions on how to use the MySQL sample database:
 
 Step 1: Download the Sample Database:

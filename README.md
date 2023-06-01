@@ -718,4 +718,210 @@ From employees e
 inner join employees m
 ON m.employeeNumber = e.reportsTo
 ORDER BY Manager;
+
+
+-- Group By
+SELECT select_list
+FROM Table
+WHERE condition
+GROUP BY c1, c2, ...;
+
+select * from orders;
+select * from orderdetails;
+
+SELECT status, COUNT(*)
+FROM orders
+GROUP BY status;
+
+
+SELECT distinct status
+FROM orders;
+
+SELECT YEAR(orderDate) as year, status, SUM(quantityOrdered * priceEach) AS "Total Amount"
+FROM orders
+INNER JOIN orderdetails
+USING (ordernumber)
+WHERE status = "Shipped"
+GROUP BY year
+HAVING year > 2003;
+
+
+SELECT ordernumber, SUM(quantityOrdered) as itemscount, SUM(priceeach * quantityOrdered) as total
+FROM orderdetails
+GROUP by ordernumber
+HAVING total > 10000 AND itemscount > 500;
+
+
+
+
+-- shipped, >1500, 
+SELECT a.ordernumber, status, SUM(priceeach * quantityOrdered) as total
+FROM orderdetails a
+INNER JOIN orders b
+ON b.ordernumber = a.ordernumber
+GROUP BY ordernumber, status
+HAVING status = 'Shipped' AND total > 50000
+
+
+
+-- SubQuery = nested query (SELECT)
+SELECT select_list
+FROM table
+WHERE condition IN (subsquery);
+
+select * from employees;
+select * from offices;
+
+
+SELECT lastName, firstName
+FROM employees
+WHERE officeCode IN (
+	SELECT officeCode
+    FROM offices
+    WHERE country = 'USA'
+);
+
+SELECT * from payments;
+
+SELECT customerNumber, amount
+FROM payments
+WHERE amount > (
+	SELECT AVG(amount)
+    FROM payments
+);
+
+-- WHERE = Subquery vs FROM = Subquery
+SELECT * from orderdetails;
+
+SELECT MAX(items), MIN(items), FLOOR(AVG(items))
+FROM (
+	SELECT ordernumber, COUNT(ordernumber) AS items
+    FROM orderdetails
+    GROUP BY ordernumber) AS lineitems;
+    
+    
+SELECT ordernumber, COUNT(ordernumber) AS items
+    FROM orderdetails
+    GROUP BY ordernumber;
+
+
+-- correlated query
+select * from products;
+
+
+SELECT productname, buyprice, productline
+FROM products p1
+WHERE buyprice > (
+	-- correlated query
+    SELECT AVG(buyprice)
+    FROM products
+    WHERE productline = p1.productline
+);
+
+
+-- INSERT
+-- INSERT INTO table(column_list) VALUES (values_list);
+
+
+CREATE TABLE IF NOT EXISTS tasks (
+    task_id INT AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    start_date DATE,
+    due_date DATE,
+    priority TINYINT NOT NULL DEFAULT 3,
+    description TEXT,
+    PRIMARY KEY (task_id)
+);
+-- 'YYYY-MM-DD'
+
+
+
+select * from tasks;
+
+INSERT INTO tasks (title, priority) VALUES ('Learn HTML', 1);
+INSERT INTo tasks (title, priority) VALUES ('Learn Angular', DEFAULT);
+
+INSERT INTO tasks (title, start_date, due_date)
+VALUES ('Learn Java', '2023-06-01', '2023-07-01');
+
+INSERT INTO tasks (title, start_date, due_date)
+VALUES ('Learn Spring Boot', CURRENT_DATE(), '2023-07-01');
+
+INSERT INTO tasks (title, priority)
+VALUES
+	('Learn CSS', DEFAULT),
+    ('Learn GIT', 1),
+    ('Take a test', 2);
+
+-- INSERT INTO SELECT
+
+CREATE TABLE suppliers (
+    supplierNumber INT AUTO_INCREMENT,
+    supplierName VARCHAR(50) NOT NULL,
+    phone VARCHAR(50),
+    addressLine1 VARCHAR(50),
+    addressLine2 VARCHAR(50),
+    city VARCHAR(50),
+    state VARCHAR(50),
+    postalCode VARCHAR(50),
+    country VARCHAR(50),
+    customerNumber INT,
+    PRIMARY KEY (supplierNumber)
+);
+
+INSERT INTO suppliers(supplierName, phone, addressLine1, addressLine2, city, state, postalCode, country, customerNumber)
+SELECT customerName, phone, addressLine1, addressLine2, city, state, postalCode, country, customerNumber
+FROM customers
+WHERE country = 'USA' AND state = 'CA';
+
+select * from suppliers;
+
+CREATE TABLE stats (
+    totalProduct INT,
+    totalCustomer INT,
+    totalOrder INT
+);
+
+INSERT INTO stats(totalProduct, totalCustomer, totalOrder)
+VALUES (
+	(SELECT count(*) FROM products),
+    (SELECT count(*) FROM customers),
+    (SELECT count(*) FROM orders)
+);
+
+select count(*) from orders;
+
+select * from stats;
+
+
+-- UPDATE
+-- SELECT firstname, lastname, email
+UPDATE employees
+SET 
+	email = "doesnotexist@gmail.com",
+	lastname = "Jill"
+WHERE employeeNumber = 1076;
+
+-- UPDATE [LOW_PRIORITY] [IGNORE] table_name
+-- SET columnname = value,
+-- WHERE condition;
+
+UPDATE employees
+SET email = REPLACE(email, '@gmail.com', '@outlook.com')
+WHERE employeeNumber = 1076;
+
+
+SELECT * from employees
+WHERE employeeNumber = 1076;
+
+-- DELETE
+-- DELETE FROM table_name
+-- WHERE condition;
+
+DELETE FROM suppliers 
+WHERE supplierNumber > 2
+LIMIT 1;
+
+SELECT * FROM suppliers;
+
 ```
